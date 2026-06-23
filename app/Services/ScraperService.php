@@ -130,8 +130,8 @@ class ScraperService
                 $comments = $vid['comment_count'] ?? 0;
                 $views = $vid['play_count'] ?? 0;
                 
-                // Engagement Rate = (likes + comments) / views * 100
-                $engagementRate = $views > 0 ? (($likes + $comments) / $views) * 100 : 0;
+                // Engagement Rate = (likes + comments) / followers * 100
+                $engagementRate = $followers > 0 ? (($likes + $comments) / $followers) * 100 : 0;
                 $engagementRate = round($engagementRate, 2);
 
                 // TikTok video URL
@@ -302,7 +302,7 @@ class ScraperService
                         $likes = (int)($views * mt_rand(2, 8) / 100);
                         $comments = (int)($likes * mt_rand(1, 5) / 100);
 
-                        $engagementRate = $views > 0 ? (($likes + $comments) / $views) * 100 : 0;
+                        $engagementRate = $followers > 0 ? (($likes + $comments) / $followers) * 100 : 0;
                         $engagementRate = round($engagementRate, 2);
 
                         $videos[] = [
@@ -374,7 +374,7 @@ class ScraperService
             $likes = mt_rand((int)($followers * 0.02), (int)($followers * 0.1));
             $comments = mt_rand((int)($likes * 0.01), (int)($likes * 0.05));
             $views = mt_rand((int)($likes * 5), (int)($likes * 25));
-            $engagementRate = $views > 0 ? (($likes + $comments) / $views) * 100 : 0;
+            $engagementRate = $followers > 0 ? (($likes + $comments) / $followers) * 100 : 0;
             $engagementRate = round($engagementRate, 2);
 
             $caption = $templates[$i % count($templates)];
