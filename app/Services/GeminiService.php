@@ -85,7 +85,7 @@ Tolong berikan analisis Anda dalam format JSON dengan struktur persis seperti be
         \"week\": \"Minggu 1\",
         \"theme\": \"[Edukasi / Tips / Soft-Selling / Hard-Selling / Behind the Scenes / Q&A / Review]\",
         \"title\": \"[Judul / Topik Ide Video - kaitkan dengan gaya video viral terpopuler]\",
-        \"schedule\": \"[Rekomendasi Hari & Jam Posting terbaik untuk niche ini, misal: 'Selasa, 19:00 WIB']\",
+        \"schedule\": \"[Rekomendasi Hari & Jam Posting terbaik untuk niche ini dalam zona waktu WIB (Waktu Indonesia Barat / UTC+7), misal: 'Selasa, 21:00 WIB']\",
         \"hook\": \"[Hook Pembuka 3 Detik Pertama (dialog/teks di layar - adaptasi pola hook viral)]\",
         \"visual\": \"[Konsep Visual & Transisi (misal: Transisi melompat, close up produk)]\",
         \"caption\": \"[Draf Caption & Tagar Terkait, sertakan CTA lembut untuk produk '{$productText}' dan kutip inspirasi video viralnya]\"
@@ -564,17 +564,17 @@ Tolong berikan analisis Anda dalam format JSON dengan struktur persis seperti be
                 $schedule = "";
                 if ($nicheKey == 'Kuliner (Food)' || $nicheKey == 'Travel & Gaya Hidup') {
                     $schedule = match($week) {
-                        1 => "Jumat, 17:00 WIB",
+                        1 => "Jumat, 19:00 WIB",
                         2 => "Sabtu, 12:00 WIB",
-                        3 => "Minggu, 18:30 WIB",
-                        default => "Kamis, 19:00 WIB"
+                        3 => "Minggu, 21:00 WIB",
+                        default => "Kamis, 19:30 WIB"
                     };
                 } else {
                     $schedule = match($week) {
-                        1 => "Selasa, 19:00 WIB",
+                        1 => "Selasa, 21:00 WIB",
                         2 => "Rabu, 19:30 WIB",
-                        3 => "Kamis, 19:00 WIB",
-                        default => "Sabtu, 13:00 WIB"
+                        3 => "Kamis, 21:00 WIB",
+                        default => "Sabtu, 19:00 WIB"
                     };
                 }
 

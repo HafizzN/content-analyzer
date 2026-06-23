@@ -117,7 +117,7 @@
                     </div>
                     <p>
                         <i class="fa-regular fa-clock"></i> 
-                        Dinalisis pada: {{ $profile->analyzed_at ? $profile->analyzed_at->format('d M Y, H:i') : now()->format('d M Y, H:i') }} WIB
+                        Dinalisis pada: {{ $profile->analyzed_at ? $profile->analyzed_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') : now()->format('d M Y, H:i') }} WIB
                     </p>
                 </div>
             </div>
@@ -314,7 +314,7 @@
                                 "{{ $topVideo->caption }}"
                             </h3>
                             <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.75rem;">
-                                Diposting pada: {{ $topVideo->post_date->format('d M Y, H:i') }}
+                                Diposting pada: {{ $topVideo->post_date->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
                             </p>
                             <div style="display: flex; gap: 1.5rem; font-size: 0.9rem;">
                                 <div><i class="fa-regular fa-eye" style="color: var(--text-secondary)"></i> <strong>{{ number_format($topVideo->views) }}</strong> Views</div>
@@ -438,8 +438,8 @@
                                     </div>
                                 </td>
                                 <td style="font-size: 0.9rem; color: var(--text-secondary);">
-                                    {{ $video->post_date->format('d M Y') }}<br>
-                                    <small>{{ $video->post_date->format('H:i') }} WIB</small>
+                                    {{ $video->post_date->setTimezone('Asia/Jakarta')->format('d M Y') }}<br>
+                                    <small>{{ $video->post_date->setTimezone('Asia/Jakarta')->format('H:i') }} WIB</small>
                                 </td>
                                 <td style="font-weight: 600; font-size: 0.95rem; color: var(--text-secondary);">
                                     {{ number_format($video->views) }}

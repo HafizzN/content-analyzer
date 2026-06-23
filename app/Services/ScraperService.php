@@ -122,9 +122,11 @@ class ScraperService
 
                 $caption = $vid['title'] ?? 'No Caption';
                 
-                // Format create_time (unix timestamp) to Y-m-d H:i:s
+                // Format create_time (unix timestamp) to Y-m-d H:i:s in WIB (Asia/Jakarta)
                 $createTime = $vid['create_time'] ?? time();
-                $postDate = date('Y-m-d H:i:s', $createTime);
+                $postDate = Carbon::createFromTimestamp($createTime, 'UTC')
+                    ->setTimezone('Asia/Jakarta')
+                    ->format('Y-m-d H:i:s');
 
                 $likes = $vid['digg_count'] ?? 0;
                 $comments = $vid['comment_count'] ?? 0;
