@@ -239,6 +239,13 @@
                 }, 3000);
             }
         });
+
+        // Sembunyikan loading overlay ketika kembali menggunakan tombol back browser
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
