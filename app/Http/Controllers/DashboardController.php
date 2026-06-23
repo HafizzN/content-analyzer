@@ -10,6 +10,9 @@ use App\Services\GeminiService;
 use App\Services\ExportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class DashboardController extends Controller
@@ -30,10 +33,36 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $profiles = Profile::withCount('videos')
-            ->with('aiAnalysis')
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        // Self-healing: auto-create SQLite file and run migrations if tables don't exist
+        try {
+            if (!Schema::hasTable('profiles')) {
+                Artisan::call('migrate', ['--force' => true]);
+            }
+        } catch (\Exception $e) {
+            try {
+                $dbPath = database_path('database.sqlite');
+                if (!file_exists($dbPath)) {
+                    $dbDir = dirname($dbPath);
+                    if (!is_dir($dbDir)) {
+                        mkdir($dbDir, 0755, true);
+                    }
+                    touch($dbPath);
+                }
+                Artisan::call('migrate', ['--force' => true]);
+            } catch (\Exception $ex) {
+                Log::error("Self-healing auto-migration failed: " . $ex->getMessage());
+            }
+        }
+
+        // Fetch profiles, fallback to empty collection if database is still missing/wiped
+        try {
+            $profiles = Profile::withCount('videos')
+                ->with('aiAnalysis')
+                ->orderBy('updated_at', 'desc')
+                ->get();
+        } catch (\Exception $e) {
+            $profiles = collect();
+        }
 
         return view('dashboard', compact('profiles'));
     }
