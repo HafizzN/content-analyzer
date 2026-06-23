@@ -178,8 +178,8 @@ class DashboardController extends Controller
         $avgViews = $videos->avg('views');
         $avgEr = $videos->avg('engagement_rate');
 
-        // Find the top-performing video by engagement rate
-        $topVideo = $videos->sortByDesc('engagement_rate')->first();
+        // Find the top-performing video by views (FYP / most viral)
+        $topVideo = $videos->sortByDesc('views')->first();
 
         // Extract and analyze hashtags from video captions
         $hashtags = [];

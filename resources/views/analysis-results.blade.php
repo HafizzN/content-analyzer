@@ -307,8 +307,8 @@
                     <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
                         <img src="{{ $topVideo->thumbnail_url }}" alt="Top Video" onerror="this.src='{{ $profile->avatar_url }}'" style="width: 100px; height: 130px; object-fit: cover; border-radius: 10px; border: 2px solid var(--accent-indigo); box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);">
                         <div style="flex: 1; min-width: 250px;">
-                            <div style="background: rgba(99, 102, 241, 0.2); color: #fff; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.75rem; border-radius: 20px; text-transform: uppercase; margin-bottom: 0.75rem; border: 1px solid rgba(99, 102, 241, 0.4);">
-                                <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> Video Performa Terbaik (Top Video)
+                            <div style="background: rgba(249, 115, 22, 0.2); color: #fff; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.75rem; border-radius: 20px; text-transform: uppercase; margin-bottom: 0.75rem; border: 1px solid rgba(249, 115, 22, 0.4);">
+                                <i class="fa-solid fa-fire" style="color: #f97316;"></i> Video Paling Viral / FYP (Top Performa)
                             </div>
                             <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; line-height: 1.5; color: #fff;">
                                 "{{ $topVideo->caption }}"
