@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ScraperService
 {
@@ -79,19 +80,29 @@ class ScraperService
         $maxAttempts = 10; // Prevent infinite loop
 
         while (count($videos) < $limit && $hasMore && $attempts < $maxAttempts) {
-            $postsUrl = "https://www.tikwm.com/api/user/posts?unique_id=" . urlencode($username) . "&cursor=" . $cursor;
+            // Add a small delay for subsequent page requests to prevent rate-limiting from server/datacenter IPs
+            if ($attempts > 0) {
+                usleep(500000); // 500ms
+            }
+
+            $postsUrl = "https://www.tikwm.com/api/user/posts?unique_id=" . urlencode($username) . "&cursor=" . $cursor . "&count=" . $limit;
+            Log::info("TikWM API request: {$postsUrl}");
             $postsResponse = file_get_contents($postsUrl, false, $context);
             
             if ($postsResponse === false) {
+                Log::warning("TikWM API request failed (file_get_contents returned false) for: {$postsUrl}");
                 break; // Stop if request fails
             }
 
             $postsData = json_decode($postsResponse, true);
             if (($postsData['code'] ?? -1) !== 0 || empty($postsData['data']['videos'])) {
+                Log::warning("TikWM API returned non-zero code or empty videos. Code: " . ($postsData['code'] ?? 'N/A') . ", Msg: " . ($postsData['msg'] ?? 'N/A'));
                 break; // Stop if no videos returned
             }
 
             $rawVideos = $postsData['data']['videos'];
+            Log::info("TikWM API returned " . count($rawVideos) . " videos for cursor " . $cursor);
+
             foreach ($rawVideos as $vid) {
                 if (count($videos) >= $limit) {
                     break;
