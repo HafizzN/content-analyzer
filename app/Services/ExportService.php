@@ -94,7 +94,7 @@ class ExportService
             "Expires"             => "0"
         ];
 
-        $columns = ['Bulan', 'Minggu', 'Kategori/Tema', 'Ide Video / Judul', 'Hook (3 Detik Pertama)', 'Konsep Visual & Transisi', 'Draf Caption & Hashtags'];
+        $columns = ['Bulan', 'Minggu', 'Kategori/Tema', 'Ide Video / Judul', 'Jadwal Posting (Hari & Jam)', 'Hook (3 Detik Pertama)', 'Konsep Visual & Transisi', 'Draf Caption & Hashtags'];
 
         $output = fopen('php://temp', 'r+');
         
@@ -109,6 +109,7 @@ class ExportService
                 $item['week'] ?? '',
                 $item['theme'] ?? '',
                 $item['title'] ?? '',
+                $item['schedule'] ?? $item['posting_schedule'] ?? '',
                 $item['hook'] ?? '',
                 $item['visual'] ?? '',
                 $item['caption'] ?? ''

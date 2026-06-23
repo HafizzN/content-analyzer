@@ -352,6 +352,7 @@
                                 <th style="width: 100px;">Waktu</th>
                                 <th style="width: 120px;">Tema</th>
                                 <th>Topik & Ide Konten</th>
+                                <th style="width: 180px;">Jadwal Posting</th>
                                 <th style="width: 250px;">Hook Pembuka (3 dtk)</th>
                                 <th style="width: 250px;">Konsep Visual</th>
                             </tr>
@@ -375,6 +376,10 @@
                                         <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4; white-space: normal;" title="Caption">
                                             <strong>Caption:</strong> {{ $item['caption'] }}
                                         </div>
+                                    </td>
+                                    <td style="font-size: 0.85rem; color: #fbbf24; font-weight: 600; vertical-align: top; white-space: normal;">
+                                        <i class="fa-regular fa-clock" style="margin-right: 0.25rem;"></i>
+                                        {{ $item['schedule'] ?? $item['posting_schedule'] ?? 'TBD' }}
                                     </td>
                                     <td style="font-size: 0.85rem; color: var(--text-primary); line-height: 1.5; vertical-align: top; background: rgba(255, 255, 255, 0.01); white-space: normal;">
                                         <i class="fa-solid fa-quote-left" style="font-size: 0.75rem; color: var(--accent-purple); margin-right: 0.25rem;"></i>
