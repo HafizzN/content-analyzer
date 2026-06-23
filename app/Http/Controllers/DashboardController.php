@@ -214,7 +214,7 @@ class DashboardController extends Controller
         $popularHashtags = array_slice($hashtags, 0, 10);
 
         // Prepare chart data (Chronological order: oldest to newest)
-        $chartVideos = $videos->sortBy('post_date');
+        $chartVideos = $videos->sortBy('post_date')->values();
         $chartLabels = $chartVideos->map(function ($video) {
             return $video->post_date->format('d M');
         })->toArray();
