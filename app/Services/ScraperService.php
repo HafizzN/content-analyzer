@@ -17,6 +17,12 @@ class ScraperService
      */
     public function scrape(string $username, string $platform, int $limit = 20): array
     {
+        $result = $this->performScrape($username, $platform, $limit);
+        return $this->cleanUtf8($result);
+    }
+
+    private function performScrape(string $username, string $platform, int $limit): array
+    {
         $cleanUsername = ltrim(trim($username), '@');
         
         if ($platform === 'tiktok') {
@@ -403,5 +409,20 @@ class ScraperService
             'niche' => $niche,
             'videos' => $videos,
         ];
+    }
+
+    /**
+     * Clean strings recursively to ensure they are valid UTF-8.
+     */
+    private function cleanUtf8($data)
+    {
+        if (is_string($data)) {
+            return mb_convert_encoding($data, 'UTF-8', 'UTF-8');
+        } elseif (is_array($data)) {
+            foreach ($data as $key => $value) {
+                $data[$key] = $this->cleanUtf8($value);
+            }
+        }
+        return $data;
     }
 }

@@ -26,6 +26,12 @@ class GeminiService
      */
     public function analyze(string $username, string $platform, array $videos, string $userNiche, ?string $productOffered): array
     {
+        $result = $this->performAnalyze($username, $platform, $videos, $userNiche, $productOffered);
+        return $this->cleanUtf8($result);
+    }
+
+    private function performAnalyze(string $username, string $platform, array $videos, string $userNiche, ?string $productOffered): array
+    {
         if (empty($this->apiKey)) {
             return $this->getSimulatedAnalysis($username, $platform, $videos, $userNiche, $productOffered);
         }
@@ -567,5 +573,20 @@ Tolong berikan analisis Anda dalam format JSON dengan struktur persis seperti be
         }
 
         return $plan;
+    }
+
+    /**
+     * Clean strings recursively to ensure they are valid UTF-8.
+     */
+    private function cleanUtf8($data)
+    {
+        if (is_string($data)) {
+            return mb_convert_encoding($data, 'UTF-8', 'UTF-8');
+        } elseif (is_array($data)) {
+            foreach ($data as $key => $value) {
+                $data[$key] = $this->cleanUtf8($value);
+            }
+        }
+        return $data;
     }
 }
