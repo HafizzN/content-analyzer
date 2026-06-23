@@ -124,8 +124,14 @@ class DashboardController extends Controller
     /**
      * Show analysis details for a profile.
      */
-    public function show(Profile $profile)
+    public function show($id)
     {
+        $profile = Profile::find($id);
+
+        if (!$profile) {
+            return redirect()->route('dashboard')->with('error', 'Sesi analisis telah berakhir atau data tidak ditemukan di server. Silakan masukkan kembali username untuk menganalisis.');
+        }
+
         $profile->load(['videos', 'aiAnalysis']);
 
         $videos = $profile->videos;
@@ -207,8 +213,14 @@ class DashboardController extends Controller
     /**
      * Export profile videos to spreadsheet.
      */
-    public function export(Profile $profile)
+    public function export($id)
     {
+        $profile = Profile::find($id);
+
+        if (!$profile) {
+            return redirect()->route('dashboard')->with('error', 'Data analisis tidak ditemukan.');
+        }
+
         $videos = $profile->videos;
 
         if ($videos->isEmpty()) {
@@ -221,8 +233,14 @@ class DashboardController extends Controller
     /**
      * Export 3-month content planner to spreadsheet.
      */
-    public function exportPlanner(Profile $profile)
+    public function exportPlanner($id)
     {
+        $profile = Profile::find($id);
+
+        if (!$profile) {
+            return redirect()->route('dashboard')->with('error', 'Data analisis tidak ditemukan.');
+        }
+
         $profile->load('aiAnalysis');
 
         if (!$profile->aiAnalysis || empty($profile->aiAnalysis->content_plan)) {
@@ -235,8 +253,14 @@ class DashboardController extends Controller
     /**
      * Delete profile analysis from history.
      */
-    public function destroy(Profile $profile)
+    public function destroy($id)
     {
+        $profile = Profile::find($id);
+
+        if (!$profile) {
+            return redirect()->route('dashboard')->with('error', 'Data analisis tidak ditemukan.');
+        }
+
         $profile->delete();
         return redirect()->route('dashboard')->with('success', 'Riwayat analisis berhasil dihapus.');
     }
