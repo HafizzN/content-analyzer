@@ -89,7 +89,7 @@
             }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="{{ asset('js/chart.umd.min.js') }}"></script>
 </head>
 <body>
 
@@ -476,82 +476,99 @@
             }
 
             // Initialize Chart.js
-            const ctx = document.getElementById('erTrendChart').getContext('2d');
-            
-            const labels = @json($chartLabels);
-            const erData = @json($chartErData);
-            const likesData = @json($chartLikesData);
+            try {
+                if (typeof Chart === 'undefined') {
+                    throw new Error("Pustaka Chart.js tidak berhasil dimuat secara lokal.");
+                }
+                const ctx = document.getElementById('erTrendChart').getContext('2d');
+                
+                const labels = @json($chartLabels);
+                const erData = @json($chartErData);
+                const likesData = @json($chartLikesData);
 
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Engagement Rate (%)',
-                        data: erData,
-                        borderColor: '#6366f1',
-                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#a855f7',
-                        pointBorderColor: '#fff',
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        tension: 0.35,
-                        fill: true,
-                        yAxisID: 'y'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#f3f4f6',
-                                font: {
-                                    family: 'Outfit',
-                                    size: 12
-                                }
-                            }
-                        },
-                        tooltip: {
-                            padding: 12,
-                            titleFont: { family: 'Outfit', size: 14, weight: 'bold' },
-                            bodyFont: { family: 'Outfit', size: 13 }
-                        }
+                if (!labels || labels.length === 0) {
+                    throw new Error("Tidak ada data video untuk divisualisasikan dalam grafik.");
+                }
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Engagement Rate (%)',
+                            data: erData,
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#a855f7',
+                            pointBorderColor: '#fff',
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.35,
+                            fill: true,
+                            yAxisID: 'y'
+                        }]
                     },
-                    scales: {
-                        x: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.05)'
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#f3f4f6',
+                                    font: {
+                                        family: 'Outfit',
+                                        size: 12
+                                    }
+                                }
                             },
-                            ticks: {
-                                color: '#9ca3af',
-                                font: { family: 'Outfit' }
+                            tooltip: {
+                                padding: 12,
+                                titleFont: { family: 'Outfit', size: 14, weight: 'bold' },
+                                bodyFont: { family: 'Outfit', size: 13 }
                             }
                         },
-                        y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.05)'
+                        scales: {
+                            x: {
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.05)'
+                                },
+                                ticks: {
+                                    color: '#9ca3af',
+                                    font: { family: 'Outfit' }
+                                }
                             },
-                            ticks: {
-                                color: '#9ca3af',
-                                font: { family: 'Outfit' },
-                                callback: function(value) { return value + '%'; }
-                            },
-                            title: {
+                            y: {
+                                type: 'linear',
                                 display: true,
-                                text: 'Engagement Rate',
-                                color: '#f3f4f6',
-                                font: { family: 'Outfit', weight: 'bold' }
+                                position: 'left',
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.05)'
+                                },
+                                ticks: {
+                                    color: '#9ca3af',
+                                    font: { family: 'Outfit' },
+                                    callback: function(value) { return value + '%'; }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Engagement Rate',
+                                    color: '#f3f4f6',
+                                    font: { family: 'Outfit', weight: 'bold' }
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            } catch (e) {
+                console.error("Gagal menginisialisasi Chart.js:", e);
+                document.querySelector('.chart-wrapper').innerHTML = `
+                    <div style="color: var(--danger); text-align: center; padding: 4rem 1rem; font-weight: 500;">
+                        <i class="fa-solid fa-triangle-exclamation" style="font-size: 2.5rem; margin-bottom: 1rem; display: block; color: var(--warning);"></i>
+                        <span>Gagal memuat grafik: ${e.message}</span>
+                    </div>
+                `;
+            }
         });
 
         // Simple and robust parser for heading, bold, bullets, code blocks, dividers, line breaks
